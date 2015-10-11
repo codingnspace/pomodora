@@ -1,0 +1,43 @@
+<div ng-controller="HomeController as vm">
+	<form ng-submit="vm.getValues()" id="formid">
+		<label>Pick a Session Time </label>
+		      <select ng-model="sestime" id="shrid">
+		        <option ng-repeat="c in vm.shours" value="{{c}}">{{c}}</option>
+		      </select>
+					<select ng-model="sessionM" id="sminid">
+		        <option ng-repeat="c in vm.smins" value="{{c}}">{{c}}</option>
+		      </select>
+					<select ng-model="sessionSk" id="ssecid">
+		        <option ng-repeat="d in vm.ssec " value="{{d}}">{{d}}</option>
+		      </select>
+					<br>
+	<label>Pick a Break Time </label>
+				<select ng-model="breaktime" id="bhrid">
+					<option ng-repeat="c in vm.bhours" value="{{c}}">{{c}}</option>
+				</select>
+				<select ng-model="breakM" id="bminid">
+					<option ng-repeat="c in vm.bmins" value="{{c}}">{{c}}</option>
+				</select>
+				<select ng-model="breakSk" id="bsecid">
+					<option ng-repeat="d in vm.bsec " value="{{d}}">{{d}}</option>
+				</select>
+
+
+
+
+
+					<md-button >Start</md-button>
+					<md-button type="button">Cancel</md-button>
+	</form>
+	Session Clock
+	<input type="text" ng-model="vm.shr">
+	<input type="text" ng-model="vm.smin">
+	<input type="text" ng-model="vm.ssecond">
+	<br>
+	Break Clock
+	<input type="text" ng-model="vm.bhr">
+	<input type="text" ng-model="vm.bmin">
+	<input type="text" ng-model="vm.bsecond">
+	<!-- <div ng-model="vm.shr"></div> -->
+<!--End Controller -->
+</div>
