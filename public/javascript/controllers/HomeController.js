@@ -26,83 +26,96 @@ vm.bsecond =0;
 vm.bmin =0;
 vm.btime = 0;
 var i = 0;
-var j = 0
+var j = -1;
 // vm.stime = 0;
 // vm.i=0;
 var on =  0;
 
 vm.start = function(){
-if(on === 1){
-		var xsec = vm.ssecond;
-		var xmin = vm.smin;
+	var xsec = vm.ssecond;
+	var xmin = vm.smin;
+	var ksec = vm.bsecond;
+	var kmin = vm.bmin;
+
+do{
 	$interval( function(){
 
    if((i===(vm.stime -(xmin*60 + xsec)) || i%3600 === 0) && i>=3600 ){
 			vm.shr--;
-			console.log("first if statement ran through but didnt sub shr");
-
 			vm.smin += 59;
 	   	}
 
 	if((i===(vm.stime - xsec ) ||( i%60 === 0)) && i>0 ){
 			// console.log("sub a minitute due to i%60 " + vm.smin);
-				if(i%3600 !== 0 && vm.smin > 0) {
+				if(i%3600 !== 0 && vm.smin > 0 &&  i>0) {
 					vm.smin--;
 					}
-			console.log("this is the subtract minute if statement " );
+			// console.log("this is the subtract minute if statement " );
 			vm.ssecond += 59;
 		  }
 
-			if (i%3600 !== 0 && i%60 !==0 && vm.ssecond >0){
+			if (i%3600 !== 0 && i%60 !==0 && vm.ssecond >0 && i >0){
 				vm.ssecond--;
+				console.log("I shouldnt still be running");
 			}
-			console.log("this is the subtract second if statement");
+			// console.log("this is the subtract second if statement");
 
-	i--;
 
-if(i === 0){
-				on = 2;
-				console.log("done!");
-				vm.break();
-	      }
-				// End of interval function
-     }, 1000);
+		if(i === 0){
+				on =2;
+				j = (vm.bhr*3600) + (vm.bmin*60 )+( vm.bsecond*1);
+				// return;
+					// break;
+		}
+
+		i--;
+		// console.log(on);
+	}, 1000);
+
    }
- }
+while (i >= 0 && (on ===1));
 
-vm.break = function(){
-		if(on===2){
-			 	var ksec = vm.bsecond;
-			 	var kmin = vm.bmin;
-			 $interval( function(){
+
+do{
+
+console.log("b portion running");
+console.log(j);
+
+$interval( function(){
 
 			  if((j===(vm.btime -(kmin*60 + ksec)) || j%3600 === 0) && j>=3600 ){
 			 		vm.bhr--;
 			 		vm.bmin += 59;
+					console.log(j + "hr port");
+
 			 		}
 
 			 if((j===(vm.btime - ksec ) ||( j%60 === 0)) && j>0 ){
 			 		// console.log("sub a minitute due to i%60 " + vm.smin);
 			 			if(j%3600 !== 0 && vm.bmin > 0) {
 			 				vm.bmin--;
+							console.log(j + "min port");
+
 			 				}
 			 		vm.bsecond += 59;
 			 		}
 
-			 		if (j%3600 !== 0 && j%60 !==0 && vm.jsecond >0){
+			 		if (j%3600 !== 0 && j%60 !==0 && vm.bsecond >0){
 			 			vm.bsecond--;
+						console.log(vm.bsecond + "minus on break second")
 			 		}
-			 	j--;
 
-			 if(j === 0){
-			 			on = 1;
-			 			console.log("done!");
-						vm.start();
-			 			}
+				if(j === 0){
+						on = 1;
+				i += vm.stime;
+				}
+				j--;
+			}, 1000);
 			 			// End of interval function
-			 	 }, 1000);
-			  }
-}
+	}
+ while(j >= 0 && (on===2));
+ }
+
 
 
 
@@ -127,8 +140,8 @@ vm.getValues = function() {
 	vm.stime = (vm.shr*3600) + (vm.smin*60 )+( vm.ssecond*1);
 	vm.btime = (vm.bhr*3600) + (vm.bmin*60 )+( vm.bsecond*1);
   i = vm.stime;
-	j = vm.btime;
-	on = 1;
+	// j = vm.btime;
+	// on = 1;
 	vm.start();
 }
 
