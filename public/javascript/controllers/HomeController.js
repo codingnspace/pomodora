@@ -30,16 +30,14 @@ var j = 0;
 vm.stime = 0;
 
 vm.sstart = function(){
+	i = vm.stime;
+
 	var xsec = vm.ssecond;
 	var xmin = vm.smin;
 	var xhr = vm.shr;
+	var st = i;
+	vm.strack();
 
-	// vm.btrack();
-	i = vm.stime;
-
-console.log(i + " i ");
-console.log(xsec + "xsec");
-console.log(xmin + "xmin");
 	$interval( function(){
 
    if((i===(vm.stime -(xmin*60 + xsec)) || i%3600 === 0) && i>=3600 ){
@@ -52,20 +50,18 @@ console.log(xmin + "xmin");
 					vm.smin--;
 					}
 			vm.ssecond += 59;
-			console.log(i + "iam adding 59 secs when i shouldnt be");
 		  }
 
 			if (i%3600 !== 0 && i%60 !==0 && vm.ssecond >0 && i >0){
 				vm.ssecond--;
-				// console.log(i + " ");
 			}
 
 
 		if(i === 0){
-			// vm.ssecond--;
 			vm.ssecond = xsec;
-			vm.min = xmin;
+			vm.smin = xmin;
 			vm.shr = xhr;
+			i = st;
 
 				// console.log("Session time is done");
 		}
@@ -74,25 +70,35 @@ console.log(xmin + "xmin");
 	}, 1000,(vm.stime+1));
 
    }
-vm.btrack =  function(){
+vm.strack =  function(){
+	i= vm.stime;
+	var xsec = vm.ssecond;
+	var xmin = vm.smin;
+	var xhr = vm.shr;
 	var smili = vm.stime*1000;
 	$timeout(function(){
 		vm.bstart(); },smili);
 }
 
-vm.strack =  function(){
+vm.btrack =  function(){
+	j = vm.btime;
+	var ksec = vm.bsecond;
+	var kmin = vm.bmin;
+	var khr = vm.bhr;
 	var bmili = vm.btime*1000;
 	$timeout(function(){
 		vm.sstart(); },bmili);
 }
 
 vm.bstart = function(){
+	j = vm.btime;
+
 	var ksec = vm.bsecond;
 	var kmin = vm.bmin;
 	var khr = vm.bhr;
+	var kt = j;
 console.log(j +' j');
-	vm.strack();
-
+	vm.btrack();
 
 $interval( function(){
 
@@ -114,17 +120,17 @@ $interval( function(){
 
 			 		if (j%3600 !== 0 && j%60 !==0 && vm.bsecond >0){
 			 			vm.bsecond--;
-						console.log(vm.bsecond + "minus one break second");
+						// console.log(vm.bsecond + "minus one break second");
 			 		}
 
 				if(j === 0){
 					vm.bsecond = ksec;
 					vm.bmin = kmin;
 					vm.bhr = khr;
-
+					j =kt;
 				}
 				j--;
-				// console.log(j +" this is j");
+				console.log(j +" this is j");
 
 			}, 1000, (vm.btime+1));
 
@@ -157,9 +163,9 @@ vm.getValues = function() {
 	vm.stime = (vm.shr*3600) + (vm.smin*60 )+( vm.ssecond*1);
 	vm.btime = (vm.bhr*3600) + (vm.bmin*60 )+( vm.bsecond*1);
 	i = vm.stime;
-j = vm.btime;
+	j = vm.btime;
 	vm.sstart();
-	vm.btrack();
+	// vm.strack();
 }
 
 }
