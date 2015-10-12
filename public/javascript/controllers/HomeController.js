@@ -16,7 +16,7 @@ function HomeController($interval,$timeout) {
 	vm.bmins = [0, 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,
 						 		31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59];
 	vm.bsec = [0, 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,
-						 31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59]
+						 31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59];
 vm.shr =0;
 vm.ssecond =0;
 vm.smin =0;
@@ -29,6 +29,27 @@ var i = 0;
 var j = 0;
 vm.stime = 0;
 
+vm.getValues = function() {
+	var h = document.getElementById("shrid");
+	var m = document.getElementById("sminid");
+	var s = document.getElementById("ssecid");
+	var bh = document.getElementById("bhrid");
+	var bm = document.getElementById("bminid");
+	var bs = document.getElementById("bsecid");
+
+	vm.shr = h.options[h.selectedIndex].value;
+	vm.smin = m.options[m.selectedIndex].value;
+  vm.ssecond = s.options[s.selectedIndex].value;
+	vm.bhr = bh.options[bh.selectedIndex].value;
+	vm.bmin = bm.options[bm.selectedIndex].value;
+	vm.bsecond = bs.options[bs.selectedIndex].value;
+
+	vm.stime = (vm.shr*3600) + (vm.smin*60 )+( vm.ssecond*1);
+	vm.btime = (vm.bhr*3600) + (vm.bmin*60 )+( vm.bsecond*1);
+
+	vm.sstart();
+}
+
 vm.sstart = function(){
 	i = vm.stime;
 
@@ -36,9 +57,10 @@ vm.sstart = function(){
 	var xmin = vm.smin;
 	var xhr = vm.shr;
 	var st = i;
+
 	vm.strack();
 
-	$interval( function(){
+var sloop =	$interval( function(){
 
    if((i===(vm.stime -(xmin*60 + xsec)) || i%3600 === 0) && i>=3600 ){
 			vm.shr--;
@@ -62,10 +84,7 @@ vm.sstart = function(){
 			vm.smin = xmin;
 			vm.shr = xhr;
 			i = st;
-
-				// console.log("Session time is done");
 		}
-			// console.log(i +" this is i");
 		i--;
 	}, 1000,(vm.stime+1));
 
@@ -100,7 +119,7 @@ vm.bstart = function(){
 console.log(j +' j');
 	vm.btrack();
 
-$interval( function(){
+var bloop = $interval( function(){
 
 			  if((j===(vm.btime -(kmin*60 + ksec)) || j%3600 === 0) && j>=3600 ){
 			 		vm.bhr--;
@@ -136,36 +155,9 @@ $interval( function(){
 
 	}
 
-
-
-
-
-
-
-
-vm.getValues = function() {
-	var h = document.getElementById("shrid");
-	var m = document.getElementById("sminid");
-	var s = document.getElementById("ssecid");
-	var bh = document.getElementById("bhrid");
-	var bm = document.getElementById("bminid");
-	var bs = document.getElementById("bsecid");
-
-
-	vm.shr = h.options[h.selectedIndex].value;
-	vm.smin = m.options[m.selectedIndex].value;
-  vm.ssecond = s.options[s.selectedIndex].value;
-	vm.bhr = bh.options[bh.selectedIndex].value;
-	vm.bmin = bm.options[bm.selectedIndex].value;
-	vm.bsecond = bs.options[bs.selectedIndex].value;
-
-
-	vm.stime = (vm.shr*3600) + (vm.smin*60 )+( vm.ssecond*1);
-	vm.btime = (vm.bhr*3600) + (vm.bmin*60 )+( vm.bsecond*1);
-	i = vm.stime;
-	j = vm.btime;
-	vm.sstart();
-	// vm.strack();
+vm.stop = function(){
+	$interval.cancel(sloop);
+  $interval.cancel(bloop); 
 }
 
 }
