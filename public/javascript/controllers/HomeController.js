@@ -4,7 +4,7 @@
 	.controller('HomeController', HomeController);
 
 
-function HomeController($interval) {
+function HomeController($interval,$timeout) {
 		var vm = this;
 
 	vm.shours = [0,1,2,3,4,5,6,7,8,9,10,11,12];
@@ -26,18 +26,20 @@ vm.bsecond =0;
 vm.bmin =0;
 vm.btime = 0;
 var i = 0;
-var j = -1;
-// vm.stime = 0;
-// vm.i=0;
-var on =  0;
+var j = 0;
+vm.stime = 0;
 
-vm.start = function(){
+vm.sstart = function(){
 	var xsec = vm.ssecond;
 	var xmin = vm.smin;
-	var ksec = vm.bsecond;
-	var kmin = vm.bmin;
+	var xhr = vm.shr;
 
-do{
+	// vm.btrack();
+	i = vm.stime;
+
+console.log(i + " i ");
+console.log(xsec + "xsec");
+console.log(xmin + "xmin");
 	$interval( function(){
 
    if((i===(vm.stime -(xmin*60 + xsec)) || i%3600 === 0) && i>=3600 ){
@@ -46,40 +48,51 @@ do{
 	   	}
 
 	if((i===(vm.stime - xsec ) ||( i%60 === 0)) && i>0 ){
-			// console.log("sub a minitute due to i%60 " + vm.smin);
 				if(i%3600 !== 0 && vm.smin > 0 &&  i>0) {
 					vm.smin--;
 					}
-			// console.log("this is the subtract minute if statement " );
 			vm.ssecond += 59;
+			console.log(i + "iam adding 59 secs when i shouldnt be");
 		  }
 
 			if (i%3600 !== 0 && i%60 !==0 && vm.ssecond >0 && i >0){
 				vm.ssecond--;
-				console.log("I shouldnt still be running");
+				// console.log(i + " ");
 			}
-			// console.log("this is the subtract second if statement");
 
 
 		if(i === 0){
-				on =2;
-				j = (vm.bhr*3600) + (vm.bmin*60 )+( vm.bsecond*1);
-				// return;
-					// break;
-		}
+			// vm.ssecond--;
+			vm.ssecond = xsec;
+			vm.min = xmin;
+			vm.shr = xhr;
 
+				// console.log("Session time is done");
+		}
+			// console.log(i +" this is i");
 		i--;
-		// console.log(on);
-	}, 1000);
+	}, 1000,(vm.stime+1));
 
    }
-while (i >= 0 && (on ===1));
+vm.btrack =  function(){
+	var smili = vm.stime*1000;
+	$timeout(function(){
+		vm.bstart(); },smili);
+}
 
+vm.strack =  function(){
+	var bmili = vm.btime*1000;
+	$timeout(function(){
+		vm.sstart(); },bmili);
+}
 
-do{
+vm.bstart = function(){
+	var ksec = vm.bsecond;
+	var kmin = vm.bmin;
+	var khr = vm.bhr;
+console.log(j +' j');
+	vm.strack();
 
-console.log("b portion running");
-console.log(j);
 
 $interval( function(){
 
@@ -91,7 +104,6 @@ $interval( function(){
 			 		}
 
 			 if((j===(vm.btime - ksec ) ||( j%60 === 0)) && j>0 ){
-			 		// console.log("sub a minitute due to i%60 " + vm.smin);
 			 			if(j%3600 !== 0 && vm.bmin > 0) {
 			 				vm.bmin--;
 							console.log(j + "min port");
@@ -102,19 +114,23 @@ $interval( function(){
 
 			 		if (j%3600 !== 0 && j%60 !==0 && vm.bsecond >0){
 			 			vm.bsecond--;
-						console.log(vm.bsecond + "minus on break second")
+						console.log(vm.bsecond + "minus one break second");
 			 		}
 
 				if(j === 0){
-						on = 1;
-				i += vm.stime;
+					vm.bsecond = ksec;
+					vm.bmin = kmin;
+					vm.bhr = khr;
+
 				}
 				j--;
-			}, 1000);
-			 			// End of interval function
+				// console.log(j +" this is j");
+
+			}, 1000, (vm.btime+1));
+
 	}
- while(j >= 0 && (on===2));
- }
+
+
 
 
 
@@ -122,12 +138,13 @@ $interval( function(){
 
 
 vm.getValues = function() {
-	var h = document.getElementById("bhrid");
-	var m = document.getElementById("bminid");
-	var s = document.getElementById("bsecid");
+	var h = document.getElementById("shrid");
+	var m = document.getElementById("sminid");
+	var s = document.getElementById("ssecid");
 	var bh = document.getElementById("bhrid");
 	var bm = document.getElementById("bminid");
 	var bs = document.getElementById("bsecid");
+
 
 	vm.shr = h.options[h.selectedIndex].value;
 	vm.smin = m.options[m.selectedIndex].value;
@@ -139,10 +156,10 @@ vm.getValues = function() {
 
 	vm.stime = (vm.shr*3600) + (vm.smin*60 )+( vm.ssecond*1);
 	vm.btime = (vm.bhr*3600) + (vm.bmin*60 )+( vm.bsecond*1);
-  i = vm.stime;
-	// j = vm.btime;
-	// on = 1;
-	vm.start();
+	i = vm.stime;
+j = vm.btime;
+	vm.sstart();
+	vm.btrack();
 }
 
 }
