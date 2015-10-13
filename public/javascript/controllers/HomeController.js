@@ -60,7 +60,7 @@ vm.sstart = function(){
 
 	vm.strack();
 
-var sloop =	$interval( function(){
+vm.sloop =	$interval( function(){
 
    if((i===(vm.stime -(xmin*60 + xsec)) || i%3600 === 0) && i>=3600 ){
 			vm.shr--;
@@ -116,23 +116,18 @@ vm.bstart = function(){
 	var kmin = vm.bmin;
 	var khr = vm.bhr;
 	var kt = j;
-console.log(j +' j');
 	vm.btrack();
 
-var bloop = $interval( function(){
+vm.bloop = $interval( function(){
 
 			  if((j===(vm.btime -(kmin*60 + ksec)) || j%3600 === 0) && j>=3600 ){
 			 		vm.bhr--;
 			 		vm.bmin += 59;
-					console.log(j + "hr port");
-
 			 		}
 
 			 if((j===(vm.btime - ksec ) ||( j%60 === 0)) && j>0 ){
 			 			if(j%3600 !== 0 && vm.bmin > 0) {
 			 				vm.bmin--;
-							console.log(j + "min port");
-
 			 				}
 			 		vm.bsecond += 59;
 			 		}
@@ -149,15 +144,13 @@ var bloop = $interval( function(){
 					j =kt;
 				}
 				j--;
-				console.log(j +" this is j");
-
 			}, 1000, (vm.btime+1));
 
 	}
 
 vm.stop = function(){
-	$interval.cancel(sloop);
-  $interval.cancel(bloop); 
+	$interval.cancel(vm.sloop);
+  $interval.cancel(vm.bloop);
 }
 
 }
